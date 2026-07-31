@@ -50,7 +50,7 @@ class PatchEmbed(nn.Module):
         self.proj2 = nn.Conv2d(in_ch, dim_spatial // 2, kernel_size=patch_size * 2, stride=patch_size, padding=patch_size // 2)
         self.norm = nn.BatchNorm2d(dim_spatial)
         self.norm2 = nn.LayerNorm(dim_spatial)
-        self.dropout = nn.Dropout(0.3)
+        self.dropout = nn.Dropout(0.1)
         nn.init.kaiming_uniform_(self.proj1.weight, mode='fan_out', nonlinearity='relu')
         nn.init.kaiming_uniform_(self.proj2.weight, mode='fan_out', nonlinearity='relu')
 
@@ -75,7 +75,7 @@ class PatchMerging(nn.Module):
         self.norm2 = nn.LayerNorm(2 * dim)
         self.residual_conv = nn.Conv2d(dim, 2 * dim, kernel_size=1)
         self.attn_pool = nn.Linear(2 * dim, 2 * dim)
-        self.dropout = nn.Dropout(0.3)
+        self.dropout = nn.Dropout(0.1)
         nn.init.kaiming_uniform_(self.conv.weight, mode='fan_out', nonlinearity='relu')
         nn.init.kaiming_uniform_(self.residual_conv.weight, mode='fan_out', nonlinearity='relu')
         nn.init.xavier_uniform_(self.attn_pool.weight)
@@ -97,7 +97,7 @@ class PatchMerging(nn.Module):
         return x
 
 class LocalChannelSpectralAttention(nn.Module):
-    def __init__(self, dim, num_heads=4, window_size=12):
+    def __init__(self, dim, num_heads=1, window_size=12):
         super().__init__()
         self.dim = dim
         self.window_size = window_size
@@ -188,7 +188,7 @@ class LocalChannelSpectralAttention(nn.Module):
 
 # --- Global Channel Spectral Attention with Dynamic Sparse Attention ---
 class GlobalChannelSpectralAttention(nn.Module):
-    def __init__(self, dim, num_clusters=32, num_heads=2):
+    def __init__(self, dim, num_clusters=32, num_heads=2):# 16 24 32 48 256
         super().__init__()
         self.dim = dim
         self.num_clusters = num_clusters
@@ -245,7 +245,7 @@ class GlobalChannelSpectralAttention(nn.Module):
 
 # --- FFTransformer with Fourier Attention ---
 class FFTransformer(nn.Module):
-    def __init__(self, dim_spatial, num_heads=4, mlp_ratio=2.0, drop=0.1, modes=64, mode_select_method='random', activation='tanh'):
+    def __init__(self, dim_spatial, num_heads=4, mlp_ratio=2.0, drop=0.3, modes=64, mode_select_method='random', activation='tanh'):
         super().__init__()
         self.dim_spatial = dim_spatial
         self.num_heads = num_heads
@@ -295,6 +295,8 @@ class FFTransformer(nn.Module):
         k_ft_ = k_ft[:, index, :]
         v_ft_ = v_ft[:, index, :]
         xqk_ft = torch.einsum("bxd,byd->bxy", q_ft_, k_ft_)
+        # 缩放：防止复数 tanh 因内积幅度随 sqrt(D) 增大而过早饱和
+        xqk_ft = xqk_ft / (self.dim_spatial ** 0.5)
         if self.activation == 'tanh':
             xqk_ft = xqk_ft.tanh()
         elif self.activation == 'softmax':
@@ -352,7 +354,7 @@ class AdaptivePooling(nn.Module):
         super().__init__()
         self.attn = nn.Linear(dim, dim)
         self.sigmoid = nn.Sigmoid()
-        self.dropout = nn.Dropout(0.1)
+        self.dropout = nn.Dropout(0.2)
 
     def forward(self, x):
         B, C, H, W = x.shape
@@ -455,6 +457,16 @@ class SpatialFractionalTransformerSwin(nn.Module):
 
 # --- Convenience Function ---
 def get_SFT_Swin(in_channels=60, num_classes=2, image_size=256, activation='tanh'):
+    return SpatialFractionalTransformerSwin(
+        in_channels=in_channels,
+        num_classes=num_classes,
+        image_size=image_size,
+        dim_spatial=96,
+        num_heads=4,
+        depth=3,
+        window_size=12
+    )
+def get_SFT_PLGC_Swin(in_channels=40, num_classes=3, image_size=256, activation='tanh'):
     return SpatialFractionalTransformerSwin(
         in_channels=in_channels,
         num_classes=num_classes,
