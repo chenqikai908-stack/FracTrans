@@ -52,12 +52,6 @@ On choledoch (MDC) and gastric precancerous lesion (PLGC) datasets, FracTrans ou
   <img src="assets/ablation.png" width="48%" alt="Ablation"/>
 </p>
 
-### t-SNE visualization
-
-<p align="center">
-  <img src="assets/tsne.png" width="88%" alt="t-SNE"/>
-</p>
-
 ---
 
 ## Repository Structure
@@ -121,37 +115,19 @@ python train_PLGC.py
 
 ---
 
-## Method Summary
+## Feature Visualization
 
-1. **Adaptive FrFT** rotates each token sequence into a fractional domain with learnable \(\alpha\).
-2. **Random frequency mode selection** samples \(K\) modes from the energy-dominant half-spectrum and sorts indices before scatter / inverse FrFT reconstruction.
-3. **Complex tanh attention** is computed per sample on the \(K\)-mode subspace (ordinary transpose \(K^\top\), scaled by \(\sqrt{d_k}\)).
-4. **LSA / GSA** capture local band neighborhoods and long-range spectral clustering.
-5. **Entropy-based multi-scale fusion + multiplicative pathology gating** produce the final representation for classification.
+t-SNE embeddings of the learned representations. FracTrans forms clearer class clusters than competing MHSI baselines.
 
----
-
-## Citation
-
-If this repository helps your research, please cite our paper (details will be updated upon publication):
-
-```bibtex
-@article{chen2025fractrans,
-  title   = {Dynamic Fractional Fourier Transformer with Local-Global Spectral Attention for Medical Hyperspectral Image Classification},
-  author  = {Chen, Qikai and Liu, Huan and Qin, Geng and Xia, Xiang-Gen and Li, Wei and Tao, Ran},
-  journal = {IEEE Transactions on Image Processing},
-  year    = {2025},
-  note    = {Under revision}
-}
-```
+<p align="center">
+  <img src="assets/tsne.png" width="92%" alt="t-SNE visualization"/>
+</p>
 
 ---
-
-## License
-
-Code is released for academic research. Please contact the authors for other use cases.
 
 ## Contact
 
 - Qikai Chen — `qikaichen@bit.edu.cn`
 - Corresponding author: Huan Liu — `huanliu233@gmail.com`
+
+Code is released for academic research.
