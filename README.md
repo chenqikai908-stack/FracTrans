@@ -32,7 +32,7 @@ On choledoch (MDC) and gastric precancerous lesion (PLGC) datasets, FracTrans ou
 ### Fractional Fourier vs. standard Fourier
 
 <p align="center">
-  <img src="assets/frft_vs_ft.png" width="72%" alt="FrFT vs FT"/>
+  <img src="assets/frft_vs_ft.png" width="92%" alt="FrFT vs FT"/>
 </p>
 
 <p align="center"><em>Adaptive FrFT better preserves high-frequency pathological textures under the same mode dropping ratio.</em></p>
