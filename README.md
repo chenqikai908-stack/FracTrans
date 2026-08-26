@@ -40,17 +40,30 @@ On choledoch (MDC) and gastric precancerous lesion (PLGC) datasets, FracTrans ou
 ### Local–Global Spectral Attention
 
 <p align="center">
-  <img src="assets/local_global.png" width="70%" alt="LSA GSA"/>
-  &nbsp;
-  <img src="assets/gsa_dc.png" width="26%" alt="Dual-channel GSA"/>
+  <img src="assets/local_global.png" width="92%" alt="LSA GSA"/>
 </p>
+
+<p align="center"><em>Local spectral attention (LSA) with sliding windows captures fine-grained neighborhood structure.</em></p>
+
+<p align="center">
+  <img src="assets/gsa_dc.png" width="92%" alt="Dual-channel GSA"/>
+</p>
+
+<p align="center"><em>Dual-channel global spectral attention (GSA) aggregates long-range frequency cues.</em></p>
 
 ### Feature fusion & ablation
 
 <p align="center">
-  <img src="assets/fusion.png" width="48%" alt="Fusion"/>
-  <img src="assets/ablation.png" width="48%" alt="Ablation"/>
+  <img src="assets/fusion.png" width="92%" alt="Fusion"/>
 </p>
+
+<p align="center"><em>Multi-scale feature fusion across PatchEmbed stages.</em></p>
+
+<p align="center">
+  <img src="assets/ablation.png" width="92%" alt="Ablation"/>
+</p>
+
+<p align="center"><em>Ablation: integrating FrTrans yields a clear accuracy gain.</em></p>
 
 ---
 
